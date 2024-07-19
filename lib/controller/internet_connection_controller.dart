@@ -1,21 +1,22 @@
-import 'dart:async';
-
 import 'package:get/get.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 class InternetConnectionController extends GetxController {
   RxInt timesConnectedDisconnected = 0.obs;
+  @override
+  void onInit() {
+    super.onInit();
+    listenToInternetChange();
+  }
 
-  StreamSubscription<InternetConnectionStatus> listenToInternetChange(
-      Function()? onReconnect) {
-    return InternetConnectionChecker().onStatusChange.listen(
+  void listenToInternetChange() {
+    InternetConnectionChecker().onStatusChange.listen(
       (status) {
         switch (status) {
           case InternetConnectionStatus.connected:
             timesConnectedDisconnected.value++;
             if (timesConnectedDisconnected.value > 1) {
               Get.snackbar("Info", "Internet has restored!");
-              onReconnect;
             }
             break;
           case InternetConnectionStatus.disconnected:

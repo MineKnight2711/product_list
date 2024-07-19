@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 
+import '../utils/bindings.dart';
 import '../view/screens/main_screen.dart';
 
 class AppRoutes {
@@ -13,9 +14,11 @@ class AppRoutes {
 
   static final List<GetPage> getPages = [
     GetPage(
-      name: _home,
-      page: () => const HomeScreen(),
-      transition: Transition.rightToLeft,
-    ),
+        name: _home,
+        page: () => HomeScreen(),
+        transition: Transition.rightToLeft,
+        bindings: [
+          HomeScreenControllerBiding(),
+        ]),
   ];
 }
