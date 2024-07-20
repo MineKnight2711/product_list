@@ -1,7 +1,5 @@
 # Flutter Burning Bros Application
 
-This mobile application empowers users to order their favorite meals with ease and convenience. Built with the powerful Flutter framework, it offers a smooth and intuitive user experience across Android and iOS devices.
-
 ## Table of Contents
 
 - [Getting Started](#getting-started)
