@@ -29,7 +29,6 @@ Before you begin, ensure you have met the following requirements:
 1. **Clone the repository:**
     ```sh
     git clone https://github.com/MineKnight2711/Running_App.git
-    cd simple-flutter-app
     ```
 
 2. **Get the dependencies:**
