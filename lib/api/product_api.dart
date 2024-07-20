@@ -12,7 +12,6 @@ class ProductApi {
           '$productBaseUrl?limit=${productLenght + 20}&skip=0&select=title,price,thumbnail');
       final response = await http.get(url);
       ResponseModel responseModel = ResponseModel();
-      print(response.statusCode);
       if (response.statusCode == 200) {
         responseModel.message = 'Success';
         responseModel.data = jsonDecode(utf8.decode(response.bodyBytes));
@@ -34,7 +33,6 @@ class ProductApi {
       if (response.statusCode == 200) {
         responseModel.message = 'Success';
         responseModel.data = jsonDecode(utf8.decode(response.bodyBytes));
-        print(responseModel.data);
         return responseModel;
       }
       responseModel.message = 'Failed';
