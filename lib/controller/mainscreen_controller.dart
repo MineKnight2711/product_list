@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:product_list/service/product_service.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,18 +9,20 @@ import '../model/product/product.dart';
 
 class HomeScreenController extends GetxController {
   late ProductApi _productApi;
+  late ProductService _productService;
   RxList<Product> listProduct = <Product>[].obs;
   RxList<Product> listSearchProDuct = <Product>[].obs;
   RxInt totalProduct = 1000.obs;
   RxBool isLoading = false.obs;
   RxBool isOutOfStock = false.obs;
   final ScrollController scrollController = ScrollController();
-
+  final TextEditingController searchController = TextEditingController();
   final searchQuerySubject = BehaviorSubject<String>();
   @override
   void onInit() {
     super.onInit();
     _productApi = ProductApi();
+    _productService = ProductService();
     getProducts();
     scrollController.addListener(loadMoreData);
 
@@ -79,5 +82,13 @@ class HomeScreenController extends GetxController {
           time: DateTime.now());
       isLoading.value = false;
     }
+  }
+
+  Future<void> addToFavorite(Product product) async {
+    await _productService.addToFavorite(product);
+  }
+
+  Stream<bool> isFavorite(int productId) {
+    return _productService.checkFavoriteStream(productId);
   }
 }

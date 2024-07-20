@@ -1,9 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:product_list/view/widgets/list_product_widget.dart';
 import '../../controller/mainscreen_controller.dart';
+import '../widgets/main_screen_appbar_widget.dart';
 
 class HomeScreen extends GetView<HomeScreenController> {
   const HomeScreen({super.key});
@@ -11,32 +10,14 @@ class HomeScreen extends GetView<HomeScreenController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Burning Bros Shop"),
-        bottom: PreferredSize(
-          preferredSize: Size(double.infinity, 60.h),
-          child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: TextField(
-              onChanged: (value) {
-                controller.onSearchQueryChanged(value);
-              },
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(50),
-                ),
-                contentPadding: const EdgeInsets.symmetric(horizontal: 20),
-                hintText: "Search Product",
-                suffixIcon: IconButton(
-                  onPressed: () {
-                    controller.listSearchProDuct.clear();
-                  },
-                  icon: const Icon(CupertinoIcons.xmark),
-                ),
-              ),
-            ),
-          ),
-        ),
+      appBar: MainScreenAppbar(
+        searchController: controller.searchController,
+        onClearPressed: () {
+          controller.listSearchProDuct.clear();
+
+          controller.searchController.clear();
+        },
+        onSearchChanged: controller.onSearchQueryChanged,
       ),
       body: Obx(
         () {
