@@ -38,36 +38,47 @@ class HomeScreen extends GetView<HomeScreenController> {
           ),
         ),
       ),
-      body: SizedBox(
-          height: 1.sh,
-          child: Obx(
-            () {
-              if (controller.listProduct.isEmpty) {
-                return const Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CircularProgressIndicator(),
-                      SizedBox(width: 20),
-                      Text("Loading..."),
-                    ],
-                  ),
-                );
-              } else if (controller.listSearchProDuct.isNotEmpty &&
-                  controller.listProduct.isNotEmpty) {
-                return ListProductWidget(
-                  products: controller.listSearchProDuct,
-                  scrollController: ScrollController(),
+      body: Obx(
+        () {
+          if (controller.listProduct.isEmpty) {
+            return const Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircularProgressIndicator(),
+                  SizedBox(width: 20),
+                  Text("Loading..."),
+                ],
+              ),
+            );
+          } else if (controller.listSearchProDuct.isNotEmpty &&
+              controller.listProduct.isNotEmpty) {
+            return ListProductWidget(
+              products: controller.listSearchProDuct,
+              scrollController: ScrollController(),
+              isLoading: controller.isLoading.value,
+              isOutOfStock: false,
+            );
+          }
+          return Column(
+            children: [
+              Expanded(
+                child: ListProductWidget(
+                  products: controller.listProduct,
+                  scrollController: controller.scrollController,
                   isLoading: controller.isLoading.value,
-                );
-              }
-              return ListProductWidget(
-                products: controller.listProduct,
-                scrollController: controller.scrollController,
-                isLoading: controller.isLoading.value,
-              );
-            },
-          )),
+                  isOutOfStock: controller.isOutOfStock.value,
+                ),
+              ),
+              if (controller.isOutOfStock.value)
+                const Padding(
+                  padding: EdgeInsets.all(10),
+                  child: Text("Đã hết sản phẩm"),
+                ),
+            ],
+          );
+        },
+      ),
     );
   }
 }

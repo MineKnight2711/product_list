@@ -5,12 +5,13 @@ import '../../model/product/product.dart';
 class ListProductWidget extends StatelessWidget {
   final List<Product> products;
   final ScrollController scrollController;
-  final bool isLoading;
+  final bool isLoading, isOutOfStock;
   const ListProductWidget({
     super.key,
     required this.products,
     required this.scrollController,
     required this.isLoading,
+    required this.isOutOfStock,
   });
 
   @override

@@ -12,21 +12,23 @@ class HomeScreenController extends GetxController {
   RxList<Product> listSearchProDuct = <Product>[].obs;
   RxInt totalProduct = 1000.obs;
   RxBool isLoading = false.obs;
+  RxBool isOutOfStock = false.obs;
   final ScrollController scrollController = ScrollController();
+
+  final searchQuerySubject = BehaviorSubject<String>();
   @override
   void onInit() {
     super.onInit();
     _productApi = ProductApi();
     getProducts();
     scrollController.addListener(loadMoreData);
+
     searchQuerySubject.stream
         .debounceTime(const Duration(milliseconds: 300))
         .listen((query) async {
       await searchProduct(query);
     });
   }
-
-  final searchQuerySubject = BehaviorSubject<String>();
 
   void onSearchQueryChanged(String query) {
     searchQuerySubject.add(query);
@@ -35,8 +37,12 @@ class HomeScreenController extends GetxController {
   void loadMoreData() {
     if (scrollController.position.pixels ==
             scrollController.position.maxScrollExtent &&
-        listProduct.length < totalProduct.value) {
+        listProduct.length <= totalProduct.value) {
       getProducts();
+    } else {
+      if (isOutOfStock.value) {
+        isOutOfStock.value = false;
+      }
     }
   }
 
@@ -45,12 +51,18 @@ class HomeScreenController extends GetxController {
     final response = await _productApi.getProducts(listProduct.length);
     if (response.message == 'Success') {
       final listProductResponse = response.data["products"] as List;
+      log('List product length: ${listProductResponse.length}',
+          time: DateTime.now());
+      if (listProductResponse.length == totalProduct.value) {
+        isOutOfStock.value = true;
+      }
       totalProduct.value = response.data["total"];
       listProduct.value = listProductResponse
           .map((product) => Product.fromJson(product))
           .toList();
+
       isLoading.value = false;
-      log('List product length: ${listProduct.length}', time: DateTime.now());
+      // log('List product length: ${listProduct.length}', time: DateTime.now());
     }
   }
 

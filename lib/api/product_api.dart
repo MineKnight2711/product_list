@@ -9,13 +9,14 @@ class ProductApi {
   Future<ResponseModel> getProducts(int productLenght) async {
     try {
       final url = Uri.parse(
-          '$productBaseUrl?limit=${productLenght + 20}&skip=$productLenght&select=title,price,thumbnail');
+          '$productBaseUrl?limit=${productLenght + 20}&skip=0&select=title,price,thumbnail');
       final response = await http.get(url);
       ResponseModel responseModel = ResponseModel();
+      print(response.statusCode);
       if (response.statusCode == 200) {
         responseModel.message = 'Success';
         responseModel.data = jsonDecode(utf8.decode(response.bodyBytes));
-        print(responseModel.data);
+
         return responseModel;
       }
       responseModel.message = 'Failed';
